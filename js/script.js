@@ -638,6 +638,25 @@ $(document).ready(function () {
         projectsNapryamkiPageSwiper.destroy(true, true);
         projectsNapryamkiPageSwiper = null;
     }
+
+    //swiper zvit one
+    let nodeZvityOtherSwiper = document.querySelector('.swiper.swiper-projects.swiper-zvity-other')
+    let zvityOtherSwiper = undefined
+    if (document.documentElement.clientWidth < 768) {
+        zvityOtherSwiper = new Swiper(nodeZvityOtherSwiper, {
+            slidesPerView: 'auto',
+            spaceBetween: 24,
+            grabCursor: true,
+            autoHeight: true,
+            pagination: {
+                el: '.swiper-zvity-other .swiper-pagination-projects',
+                clickable: true
+            },
+        })
+    } else if(zvityOtherSwiper) {
+        zvityOtherSwiper.destroy(true, true);
+        zvityOtherSwiper = null;
+    }
     
     //swiper news
     let newsBannerSwiper = new Swiper('.swiper.swiper-last-news', {
