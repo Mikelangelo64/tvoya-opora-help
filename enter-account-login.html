@@ -61,6 +61,19 @@
                     <button class="nav-search-btn" type="submit">Пошук</button>
                 </div>
             </form>
+            <form class="nav-subscribe" method="get" action="">
+                <div class="nav-search-box">
+                    <div class="nav-search-query">
+                        <input type="text" name="q" placeholder="email">
+                    </div>
+
+                    <button class="nav-search-btn" type="submit">
+                        <svg width="8" height="15" viewBox="0 0 8 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0.827341 1.30631L7.19141 7.67017L0.827341 14.034" stroke="#fff" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
         </div>
         <div class="dropdown-nav-menu"><ul class="two-nav-list">
     <li class="two-nav-item hover-active">
@@ -210,7 +223,7 @@
 </div>
 
 </div>
-<section class="container">
+<section class="container container__small">
     <div class="login rounded">
         <div class="login__wrapper rounded">
             <h2 class="login__title">
@@ -227,10 +240,12 @@
                 <div class="login-form__inputs">
                     <div class="login-form__item">
                         <input type="email" name="email" placeholder="Email *">
+                        <em>**error</em>
                     </div>
                     
                     <div class="login-form__item login-form__password">
                         <input type="password" name="password" placeholder="Введіть пароль*">
+                        <em>**error</em>
                         <div class="login-form__password__label">
                             <svg width="25" height="16" viewBox="0 0 25 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="12.0918" cy="8.26562" r="3.75" stroke="#879E95" stroke-width="1.5"/>
