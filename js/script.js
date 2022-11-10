@@ -24,7 +24,7 @@ $(document).ready(function () {
 
     //money-form collapse
     if (document.documentElement.clientWidth < 768){
-        $('.separate-section-card__project-page__help').slideUp()
+        $('.separate-section-card__project-page__help').not($('._not-closed')).slideUp()
         $('.separate-section-card__main__form').slideUp()
 
         $('.separate-section-card__open__form').click(function(e){
@@ -486,6 +486,153 @@ $(document).ready(function () {
         makePreviewImg($(`._add-${filesList}-${counter}`)[0])
     }
 
+    //help more
+    $(`.help-money .help-money__content`).slideUp(0)
+
+    $('.help-money__btn').click(function(e) {
+        const section = $(this).attr('data-help')
+        
+        $(`.help-money._money-${section}`).addClass('_opened')
+        
+        $(`._money-${section} .help-money__more__container`).slideUp(300)
+        $(`._money-${section} .help-money__content`).slideDown(300)
+
+    })
+
+    $('.help-money__close').click(function(e) {
+        const section = $(this).attr('data-help')
+        
+        $(`.help-money._money-${section}`).removeClass('_opened')
+        
+        $(`._money-${section} .help-money__more__container`).slideDown(300)
+        $(`._money-${section} .help-money__content`).slideUp(300)
+
+    })
+
+    //help-toggle
+    activateToggleHelpMoney('.help-money-toggle')
+
+    function activateToggleHelpMoney(section){
+        $(`${section} .help-money-toggle-content__item`).not($(`${section} .help-money-toggle-content__item._active-page`)).fadeOut(200)
+
+        $(`${section} .help-money-toggle-head__item`).click(function(event){
+            //console.log(1, this);
+            //const menuLink = event.target;
+            const goto = $(this).attr('data-toggle-page');
+        // console.log(2, $(goto));
+        if(goto && $(goto)){
+                $(this).addClass("_active-page");
+                $(`${section} ${goto}`).addClass("_active-page");
+
+                $(`${section} .help-money-toggle-head__item`).not($(this)).removeClass("_active-page");
+                $(`${section} .help-money-toggle-content__item`).not($(goto)).removeClass("_active-page");
+                $(`${section} .help-money-toggle-content__item`).not($(goto)).fadeOut(0)
+            
+                $(goto).fadeIn(400);
+            }
+
+            event.preventDefault();
+        })
+    }
+
+    //transfer
+    if(document.body.clientWidth <= 1250) {
+        $('.transfer-list__item').not($('.transfer-list__item._first')).slideUp(0)
+        $('.transfer-item').children('.transfer-item__title__container._additional').slideUp(0)
+        $('.transfer-item').children('.transfer-list._additional .transfer-list__item').slideUp(0)
+    }
+
+    $('.transfer-list__more').click(function() {
+        //$(this).parent().toggleClass('_opened')
+        $(this).parent().parent().children('.transfer-list').toggleClass('_opened')
+        $(this).parent().parent().children('.transfer-item__title__container._additional').slideToggle(300)
+        //$(this).parent().children('.transfer-list__item').not($('.transfer-list__item._first')).slideToggle(300)
+        $(this).parent().parent().children('.transfer-list').children('.transfer-list__item').not($('.transfer-list__item._first')).slideToggle(300)
+    })
+
+    //transfer copy in buffer
+    $('.transfer-item__btn').click(function(e) {
+        e.preventDefault()
+        const select = $(this).attr('data-get')
+        let message = ''
+        let popUp = null
+        let items = []
+
+        if($('.pop-up-buffer')[0]){
+            popUp = $('.pop-up-buffer')
+            $(popUp).removeClass('_active')
+        }
+        if(!select) {
+            message = 'Oooops... something wrong'
+            return null
+        }
+
+        const transfer = Array.from(document.querySelectorAll('.transfer-item')).filter(item => item.dataset.item === select)
+        if(transfer.length === 0) {
+            message = 'Oooops... something wrong'
+            return null
+        }
+
+        const list = Array.from(transfer[0].children).filter(child => (
+            Array.from(child.classList).includes('transfer-list')
+        ))
+        if(list.length === 0) {
+            message = 'Oooops... something wrong'
+            return null
+        }
+
+        list.forEach(item => (
+            items.push(
+                ...Array.from(item.children).filter(child => child.localName === 'a')
+            )
+        ))
+        if(items.length === 0) {
+            message = 'Oooops... something wrong'
+            return null
+        }
+        
+        navigator.clipboard.writeText(items.map(item => item.dataset.value).join(',\n '))
+            .then(() => message = 'Copied!')
+            .catch(() => message = 'Oooops... something wrong')
+            .finally(() => {
+                if(popUp){
+                    $(popUp).addClass('_active')
+                    $(popUp).children().children('.pop-up-buffer__text').html(message)
+                }
+                setTimeout(() => $(popUp).removeClass('_active'), 2000)
+            })
+    })
+
+    $('.transfer-list__item').click(function(e) {
+        e.preventDefault()
+        const data = $(this).attr('data-value')
+        let message = ''
+        let popUp = null
+
+        if($('.pop-up-buffer')[0]){
+            popUp = $('.pop-up-buffer')
+            $(popUp).removeClass('_active')
+        }
+
+        navigator.clipboard.writeText(data)
+            .then(() => {
+                if(data) {
+                    message = 'Copied!'
+                } else {
+                    message = 'Oooops... something wrong'
+                }
+            })
+            .catch(() => {
+                message = 'Oooops... something wrong'
+            })
+            .finally(() => {
+                if(popUp){
+                    $(popUp).addClass('_active')
+                    $(popUp).children().children('.pop-up-buffer__text').html(message)
+                }
+                setTimeout(() => $(popUp).removeClass('_active'), 2000)
+            })
+    })
 
     //swipers
     let mainBannerSwiper = new Swiper('.swiper.swiper-main-slider', {
